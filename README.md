@@ -20,16 +20,23 @@ This skill gives you a **single command** that scans and reports the complete in
 
 ## Install
 
+### Option A: Ask your agent
+
+Tell Claude Code (or any compatible agent):
+
+> Install claude-code-tool-lister from https://github.com/qinXpeng/claude-code-tool-lister
+
+The agent will clone it into `~/.claude/skills/tool-lister` and it's ready to use.
+
+### Option B: Manual
+
 ```bash
-# Clone into your Claude Code skills directory
 git clone https://github.com/qinXpeng/claude-code-tool-lister.git ~/.claude/skills/tool-lister
 ```
 
-Or use skillhub:
+### Cross-platform
 
-```bash
-skillhub install claude-code-tool-lister --dir ~/.claude/skills
-```
+Works on **macOS**, **Linux**, and **Windows**. Python 3.8+ standard library only — no pip install needed.
 
 ## Usage
 
