@@ -22,7 +22,7 @@ This skill gives you a **single command** that scans and reports the complete in
 
 ```bash
 # Clone into your Claude Code skills directory
-git clone https://github.com/qinpe/claude-code-tool-lister.git ~/.claude/skills/tool-lister
+git clone https://github.com/qinXpeng/claude-code-tool-lister.git ~/.claude/skills/tool-lister
 ```
 
 Or use skillhub:
