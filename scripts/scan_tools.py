@@ -128,7 +128,26 @@ def scan_mcp_servers() -> list[dict]:
     results = []
     seen = set()
 
-    # Walk cache/** for .mcp.json files (handles nested version dirs)
+    # 1. Read ~/.claude.json for user-level MCP servers
+    claude_json = CLAUDE_HOME.parent / ".claude.json"
+    if claude_json.exists():
+        try:
+            data = json.loads(claude_json.read_text(encoding="utf-8"))
+            for name, config in data.get("mcpServers", {}).items():
+                if name in seen:
+                    continue
+                seen.add(name)
+                cmd = config.get("command", "")
+                args = " ".join(config.get("args", []))
+                results.append({
+                    "name": name,
+                    "command": cmd,
+                    "args": args,
+                })
+        except (json.JSONDecodeError, OSError):
+            pass
+
+    # 2. Walk cache/** for .mcp.json files (plugin MCPs)
     cache_dir = CLAUDE_HOME / "plugins" / "cache"
     if cache_dir.exists():
         for mcp_json in cache_dir.glob("**/.mcp.json"):
@@ -146,12 +165,12 @@ def scan_mcp_servers() -> list[dict]:
             except (json.JSONDecodeError, OSError):
                 pass
 
-    # Also check browser-bridge
+    # 3. Fallback: browser-bridge token exists but no config found
     bb_token = CLAUDE_HOME / "browser-bridge-token"
-    if bb_token.exists():
+    if bb_token.exists() and "browser-bridge" not in seen:
         results.append({
             "name": "browser-bridge",
-            "command": "browser-bridge (built-in)",
+            "command": "browser-bridge (token found, MCP not registered)",
             "args": "",
         })
 
@@ -201,6 +220,7 @@ KNOWN_CLIS = [
     ("sqlite3", "SQLite CLI"),
     ("redis-cli", "Redis CLI"),
     ("mongosh", "MongoDB Shell"),
+    ("skillhub", "Claude Code skill marketplace CLI"),
     ("heroku", "Heroku CLI"),
     ("fly", "Fly.io CLI"),
     ("vercel", "Vercel CLI"),
@@ -215,11 +235,30 @@ KNOWN_CLIS = [
 ]
 
 
+def _find_cmd(cmd: str) -> str | None:
+    """Like shutil.which but also finds extension-less files on Windows."""
+    path = shutil.which(cmd)
+    if path:
+        return path
+    # On Windows, shutil.which only matches PATHEXT extensions. Fall back to
+    # checking PATH manually for extension-less executables (e.g. bash scripts).
+    if sys.platform == "win32":
+        path_dirs = os.environ.get("PATH", "").split(os.pathsep)
+        for d in path_dirs:
+            candidate = Path(d) / cmd
+            try:
+                if candidate.is_file():
+                    return str(candidate)
+            except OSError:
+                pass
+    return None
+
+
 def scan_system_clis() -> list[dict]:
     """Scan PATH for known useful CLIs."""
     results = []
     for cmd, desc in KNOWN_CLIS:
-        path = shutil.which(cmd)
+        path = _find_cmd(cmd)
         if path:
             # Try to get version (best-effort, 2s timeout)
             version = ""
