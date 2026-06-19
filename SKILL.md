@@ -1,4 +1,4 @@
----
+﻿---
 name: tool-lister
 description: Scans and inventories all tools available to Claude Code — MCP servers, plugins, slash commands, skills, and system CLIs in PATH. Use when asked "what tools are installed", "list capabilities", or when you need a full inventory before starting work.
 ---
@@ -9,7 +9,7 @@ Scan and inventory all tools available to Claude Code:
 - MCP servers (browser-bridge, playwright, etc.)
 - Installed plugins
 - Slash commands (/spec, /plan, /build, etc.)
-- Skills (from ~/.claude/skills/)
+- Skills (from ~/.claude/skills/ and ~/.agents/skills/)
 - System-level CLIs in PATH (gh, git, docker, python, node, etc.)
 
 ## When to use
@@ -25,7 +25,7 @@ Invoke this skill when:
 Run the scan script:
 
 ```bash
-python /c/Users/qinpe/.claude/skills/tool-lister/scripts/scan_tools.py
+python /c/Users/qinpe/.agents/skills/tool-lister/scripts/scan_tools.py
 ```
 
 ## Script location

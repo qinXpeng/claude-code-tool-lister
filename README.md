@@ -1,6 +1,6 @@
-# Claude Code Tool Lister
+﻿# Claude Code Tool Lister
 
-> Instantly scan and inventory everything installed for Claude Code — MCP servers, plugins, slash commands, skills, and system CLIs in PATH.
+> Instantly scan and inventory everything installed for Claude Code and agent skill directories — MCP servers, plugins, slash commands, skills, and system CLIs in PATH.
 
 ## Why
 
@@ -15,7 +15,7 @@ This skill gives you a **single command** that scans and reports the complete in
 | 🔌 MCP Servers | `~/.claude/plugins/cache/**/.mcp.json`, `browser-bridge` |
 | 🧩 Plugins | `~/.claude/plugins/installed_plugins.json` |
 | ⚡ Slash Commands | `~/.claude/commands/*.md` |
-| 🎯 Skills | `~/.claude/skills/*/SKILL.md` |
+| 🎯 Skills | `~/.claude/skills/*/SKILL.md`, `~/.agents/skills/*/SKILL.md` |
 | 🖥️ System CLIs | PATH scan for 50+ known tools (`gh`, `git`, `docker`, `node`, `python`, `kubectl`, `curl`, etc.) |
 
 ## Install
@@ -26,12 +26,12 @@ Tell Claude Code (or any compatible agent):
 
 > Install claude-code-tool-lister from https://github.com/qinXpeng/claude-code-tool-lister
 
-The agent will clone it into `~/.claude/skills/tool-lister` and it's ready to use.
+The agent will clone it into `~/.claude/skills/tool-lister` or `~/.agents/skills/tool-lister` and it's ready to use.
 
 ### Option B: Manual
 
 ```bash
-git clone https://github.com/qinXpeng/claude-code-tool-lister.git ~/.claude/skills/tool-lister
+git clone https://github.com/qinXpeng/claude-code-tool-lister.git ~/.agents/skills/tool-lister
 ```
 
 ### Cross-platform
@@ -49,7 +49,7 @@ In Claude Code, just type:
 Or invoke the script directly:
 
 ```bash
-python ~/.claude/skills/tool-lister/scripts/scan_tools.py
+python ~/.agents/skills/tool-lister/scripts/scan_tools.py
 ```
 
 ### Sample output
@@ -73,7 +73,7 @@ python ~/.claude/skills/tool-lister/scripts/scan_tools.py
 /spec · /plan · /build · /test · /review · /code-simplify · /ship · /webperf
 
 ## 🎯 Skills
-akshare-stock · api-and-interface-design · test-driven-development · ... (27 total)
+akshare-stock (~/.agents/skills) · api-and-interface-design (~/.agents/skills) · test-driven-development (~/.agents/skills) · ... (27 total)
 
 ## 🖥️ System CLIs
 gh(2.94) · git(2.54) · python(3.14) · node(24.16) · docker(28.5) · kubectl · ...
